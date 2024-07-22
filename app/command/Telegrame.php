@@ -93,6 +93,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * 启动与机器人的对话:
  * 发送 /start 命令来启动与机器人的对话。这样机器人就可以开始接收你的消息了。
  * https://core.telegram.org/bots/api#sendphoto
+ * https://winamp.top/266.html
  */
 class Telegrame extends Command
 {
