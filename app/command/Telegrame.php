@@ -92,7 +92,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * 启动与机器人的对话:
  * 发送 /start 命令来启动与机器人的对话。这样机器人就可以开始接收你的消息了。
- *
+ * https://core.telegram.org/bots/api#sendphoto
  */
 class Telegrame extends Command
 {
@@ -114,22 +114,29 @@ class Telegrame extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-
+        /** token */
         $bot_token = '7339362087:AAGIWrec4iyNMmvVMc5Bbz8-FUZo8H8VHJk';
-
+        /** 机器人姓名 */
         $bot_username = "yanglong_bot";
 
         $telegram = new \zafarjonovich\Telegram\BotApi($bot_token);
 
-        //$chat_id = 6501097796;
-        $chat_id = -4247452277;
         /** 测试群 */
-        $chat_id = -4239713236;
-        $text = '测试群';
-        $telegram->sendMessage($chat_id, $text);
+        $chat_id = -1002234986148;
+        $target_chat_id = -4247452277;
+        $text = 'axiba';
+        /** 发送普通消息 */
+        $send = $telegram->sendMessage($chat_id, $text);
+        $messageId = $send["result"]["message_id"] ?? 0;
+        //var_dump($send);
+
+
+        /** 获取聊天记录 */
         $updates = $telegram->getUpdates();
+
         foreach ($updates['result'] as $update){
             if (isset($update['message'])){
+
                 $chat_id = $update['message']['chat']['id'];
                 $text = $update['message']['text']??'';
                 $message_type = $update['message']['chat']['type'];  // 群组类型（group, supergroup, channel）
@@ -141,8 +148,37 @@ class Telegrame extends Command
             }
         }
 
+        /** 测试转发消息 */
+        $response = $telegram->forwardMessage( $target_chat_id, $chat_id, $messageId );
 
+        //var_dump($response);
 
+        // 消息文本
+        $message_text = 'Choose an option:';
+
+        /** 发送带有按钮的消息 */
+        // Inline Keyboard 按钮
+        $keyboard = [
+            [
+                ['text' => 'Button 1', 'callback_data' => 'button1'],
+                ['text' => 'Button 2', 'callback_data' => 'button2']
+            ],
+            [
+                ['text' => 'Button 3', 'callback_data' => 'button3']
+            ]
+        ];
+
+        // 发送带有 Inline Keyboard 的消息
+        $response = $telegram->sendMessage(
+            $chat_id,
+            $message_text,
+            [
+                'reply_markup' => json_encode([
+                    'inline_keyboard' => $keyboard
+                ])
+            ]
+        );
+        var_dump($response);
 
         return 1;
     }
