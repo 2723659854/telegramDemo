@@ -10,6 +10,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * @purpose 测试飞机号
+ * @link https://core.telegram.org/API
  * 想开一台吃灰机器，没有IP故无法开机，使用脚本刷机，并推送到Telegrame。其实刷机就可以了，推不推送也没多大关系。但脚本需要填写这些参数，不会修改就照抄了。
  * 一、加入 BotFather 机器人
  * 点击网址https://t.me/BotFather ，打开与它的聊天界面。
@@ -122,12 +123,27 @@ class Telegrame extends Command
 
         //$chat_id = 6501097796;
         $chat_id = -4247452277;
-        $text = '各位大佬好，我是机器人！';
+        /** 测试群 */
+        $chat_id = -4239713236;
+        $text = '测试群';
         $telegram->sendMessage($chat_id, $text);
-        //$updates = $telegram->getUpdates();
-        //var_dump($updates);
+        $updates = $telegram->getUpdates();
+        foreach ($updates['result'] as $update){
+            if (isset($update['message'])){
+                $chat_id = $update['message']['chat']['id'];
+                $text = $update['message']['text']??'';
+                $message_type = $update['message']['chat']['type'];  // 群组类型（group, supergroup, channel）
 
-        var_dump($chat_id);
+                // 打印群组消息和 chat_id
+                echo "Chat ID: " . $chat_id . "\n";
+                echo "Message: " . $text . "\n";
+                echo "Message Type: " . $message_type . "\n";
+            }
+        }
+
+
+
+
         return 1;
     }
 
