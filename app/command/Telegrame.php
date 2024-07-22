@@ -134,6 +134,7 @@ class Telegrame extends Command
         /** 获取聊天记录 */
         $updates = $telegram->getUpdates();
 
+        /** 这里测试用的命令行获取聊天内容，实际上用webhook方法接收推送的消息，里面有消息ID，谁发的消息，谁点击了按钮 */
         foreach ($updates['result'] as $update){
             if (isset($update['message'])){
 
