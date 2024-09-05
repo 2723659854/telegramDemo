@@ -8,13 +8,7 @@ class IndexController
 {
     public function index(Request $request)
     {
-        $tokenizer = new TheSeer\Tokenizer\Tokenizer();
-        $tokens = $tokenizer->parse(file_get_contents(__DIR__ . '/src/XMLSerializer.php'));
-
-        $serializer = new TheSeer\Tokenizer\XMLSerializer();
-        $xml = $serializer->toXML($tokens);
-
-        echo $xml;
+        return view('index/view', ['name' => 'webman']);
 
     }
 
